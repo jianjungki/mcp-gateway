@@ -17,7 +17,7 @@ func newTestRedisStorage(t *testing.T) (*RedisStorage, *miniredis.Miniredis) {
 	if err != nil {
 		t.Fatalf("failed to start miniredis: %v", err)
 	}
-	s, err := NewRedisStorage(cnst.RedisClusterTypeSingle, mr.Addr(), "", "", "", 0)
+	s, err := NewRedisStorage(cnst.RedisClusterTypeSingle, mr.Addr(), "", "", "", "", "", 0)
 	if err != nil {
 		mr.Close()
 		t.Fatalf("failed to create RedisStorage: %v", err)
@@ -101,7 +101,7 @@ func TestRedisStorage_Token_Flow(t *testing.T) {
 
 func TestNewRedisStorage_ConnectionError(t *testing.T) {
 	// invalid address should fail to ping
-	s, err := NewRedisStorage(cnst.RedisClusterTypeSingle, "127.0.0.1:0", "", "", "", 0)
+	s, err := NewRedisStorage(cnst.RedisClusterTypeSingle, "127.0.0.1:0", "", "", "", "", "", 0)
 	assert.Nil(t, s)
 	assert.Error(t, err)
 }

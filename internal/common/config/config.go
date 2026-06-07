@@ -80,15 +80,17 @@ type (
 
 	// SessionRedisConfig represents the Redis configuration for session storage
 	SessionRedisConfig struct {
-		ClusterType string        `yaml:"cluster_type"` // "single", "cluster" or "sentinel"
-		Addr        string        `yaml:"addr"`         // multiple addresses separated by ;.
-		MasterName  string        `yaml:"master_name"`  // MasterName is the sentinel master name.
-		Username    string        `yaml:"username"`
-		Password    string        `yaml:"password"`
-		DB          int           `yaml:"db"`
-		Topic       string        `yaml:"topic"`
-		Prefix      string        `yaml:"prefix"`
-		TTL         time.Duration `yaml:"ttl"` // TTL for session data in Redis
+		ClusterType      string        `yaml:"cluster_type"` // "single", "cluster" or "sentinel"
+		Addr             string        `yaml:"addr"`         // multiple addresses separated by ;.
+		MasterName       string        `yaml:"master_name"`  // MasterName is the sentinel master name.
+		Username         string        `yaml:"username"`
+		Password         string        `yaml:"password"`
+		SentinelUsername string        `yaml:"sentinel_username"`
+		SentinelPassword string        `yaml:"sentinel_password"`
+		DB               int           `yaml:"db"`
+		Topic            string        `yaml:"topic"`
+		Prefix           string        `yaml:"prefix"`
+		TTL              time.Duration `yaml:"ttl"` // TTL for session data in Redis
 	}
 
 	// LoggerConfig represents the logger configuration
@@ -123,12 +125,14 @@ type (
 		Redis OAuth2RedisConfig `yaml:"redis"`
 	}
 	OAuth2RedisConfig struct {
-		ClusterType string `yaml:"cluster_type"` // "single", "cluster" or "sentinel"
-		Addr        string `yaml:"addr"`
-		MasterName  string `yaml:"master_name"` // MasterName is the sentinel master name.
-		Username    string `yaml:"username"`
-		Password    string `yaml:"password"`
-		DB          int    `yaml:"db"`
+		ClusterType      string `yaml:"cluster_type"` // "single", "cluster" or "sentinel"
+		Addr             string `yaml:"addr"`
+		MasterName       string `yaml:"master_name"` // MasterName is the sentinel master name.
+		Username         string `yaml:"username"`
+		Password         string `yaml:"password"`
+		SentinelUsername string `yaml:"sentinel_username"`
+		SentinelPassword string `yaml:"sentinel_password"`
+		DB               int    `yaml:"db"`
 	}
 
 	// GoogleOAuthConfig defines Google OAuth configuration

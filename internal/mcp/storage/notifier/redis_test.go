@@ -36,7 +36,7 @@ func TestRedisNotifier_WatchAndNotify(t *testing.T) {
 	logger := zap.NewNop()
 	stream := "unla:mcp:updates"
 
-	recv, err := NewRedisNotifier(logger, cnst.RedisClusterTypeSingle, mr.Addr(), "", "", "", 0, stream, config.RoleReceiver)
+	recv, err := NewRedisNotifier(logger, cnst.RedisClusterTypeSingle, mr.Addr(), "", "", "", "", "", 0, stream, config.RoleReceiver)
 	assert.NoError(t, err)
 	assert.NotNil(t, recv)
 
@@ -48,7 +48,7 @@ func TestRedisNotifier_WatchAndNotify(t *testing.T) {
 	assert.NotNil(t, ch)
 
 	// Create a sender and push an update
-	send, err := NewRedisNotifier(logger, cnst.RedisClusterTypeSingle, mr.Addr(), "", "", "", 0, stream, config.RoleSender)
+	send, err := NewRedisNotifier(logger, cnst.RedisClusterTypeSingle, mr.Addr(), "", "", "", "", "", 0, stream, config.RoleSender)
 	assert.NoError(t, err)
 	cfg := &config.MCPConfig{Name: "cfg-1"}
 	assert.NoError(t, send.NotifyUpdate(context.Background(), cfg))
@@ -80,7 +80,7 @@ func TestRedisNotifier_Watch_NotReceiver(t *testing.T) {
 	}
 	defer mr.Close()
 
-	n, err := NewRedisNotifier(zap.NewNop(), cnst.RedisClusterTypeSingle, mr.Addr(), "", "", "", 0, "stream", config.RoleSender)
+	n, err := NewRedisNotifier(zap.NewNop(), cnst.RedisClusterTypeSingle, mr.Addr(), "", "", "", "", "", 0, "stream", config.RoleSender)
 	assert.NoError(t, err)
 	ch, werr := n.Watch(context.Background())
 	assert.Nil(t, ch)
@@ -94,7 +94,7 @@ func TestRedisNotifier_NotifyUpdate_NotSender(t *testing.T) {
 	}
 	defer mr.Close()
 
-	n, err := NewRedisNotifier(zap.NewNop(), cnst.RedisClusterTypeSingle, mr.Addr(), "", "", "", 0, "stream", config.RoleReceiver)
+	n, err := NewRedisNotifier(zap.NewNop(), cnst.RedisClusterTypeSingle, mr.Addr(), "", "", "", "", "", 0, "stream", config.RoleReceiver)
 	assert.NoError(t, err)
 	err = n.NotifyUpdate(context.Background(), &config.MCPConfig{Name: "x"})
 	assert.ErrorIs(t, err, cnst.ErrNotSender)
@@ -102,7 +102,7 @@ func TestRedisNotifier_NotifyUpdate_NotSender(t *testing.T) {
 
 func TestNewRedisNotifier_ConnectionError(t *testing.T) {
 	// invalid address should cause ping failure
-	n, err := NewRedisNotifier(zap.NewNop(), cnst.RedisClusterTypeSingle, "127.0.0.1:0", "", "", "", 0, "stream", config.RoleBoth)
+	n, err := NewRedisNotifier(zap.NewNop(), cnst.RedisClusterTypeSingle, "127.0.0.1:0", "", "", "", "", "", 0, "stream", config.RoleBoth)
 	assert.Nil(t, n)
 	assert.Error(t, err)
 }

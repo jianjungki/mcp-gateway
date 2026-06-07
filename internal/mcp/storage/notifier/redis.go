@@ -25,7 +25,7 @@ type RedisNotifier struct {
 }
 
 // NewRedisNotifier creates a new Redis-based notifier
-func NewRedisNotifier(logger *zap.Logger, clusterType, addr, masterName, username, password string, db int, streamName string, role config.NotifierRole) (*RedisNotifier, error) {
+func NewRedisNotifier(logger *zap.Logger, clusterType, addr, masterName, username, password, sentinelUsername, sentinelPassword string, db int, streamName string, role config.NotifierRole) (*RedisNotifier, error) {
 	addrs := utils.SplitByMultipleDelimiters(addr, ";", ",")
 	redisOptions := &redis.UniversalOptions{
 		Addrs:    addrs,
@@ -34,6 +34,8 @@ func NewRedisNotifier(logger *zap.Logger, clusterType, addr, masterName, usernam
 	}
 	if clusterType == cnst.RedisClusterTypeSentinel {
 		redisOptions.MasterName = masterName
+		redisOptions.SentinelUsername = sentinelUsername
+		redisOptions.SentinelPassword = sentinelPassword
 	}
 	if clusterType != cnst.RedisClusterTypeCluster {
 		// can not set db in cluster mode

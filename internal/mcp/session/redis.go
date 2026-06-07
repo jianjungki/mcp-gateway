@@ -41,6 +41,8 @@ func NewRedisStore(ctx context.Context, logger *zap.Logger, cfg config.SessionRe
 	}
 	if cfg.ClusterType == cnst.RedisClusterTypeSentinel {
 		redisOptions.MasterName = cfg.MasterName
+		redisOptions.SentinelUsername = cfg.SentinelUsername
+		redisOptions.SentinelPassword = cfg.SentinelPassword
 	}
 	if cfg.ClusterType != cnst.RedisClusterTypeCluster {
 		// can not set db in cluster mode

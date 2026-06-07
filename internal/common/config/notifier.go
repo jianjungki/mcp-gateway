@@ -24,13 +24,15 @@ type (
 
 	// RedisConfig represents the configuration for Redis-based notifier
 	RedisConfig struct {
-		ClusterType string `yaml:"cluster_type"` // "single", "cluster" or "sentinel"
-		Addr        string `yaml:"addr"`
-		MasterName  string `yaml:"master_name"` // MasterName is the sentinel master name.
-		Username    string `yaml:"username"`
-		Password    string `yaml:"password"`
-		DB          int    `yaml:"db"`
-		Topic       string `yaml:"topic"`
+		ClusterType      string `yaml:"cluster_type"` // "single", "cluster" or "sentinel"
+		Addr             string `yaml:"addr"`
+		MasterName       string `yaml:"master_name"` // MasterName is the sentinel master name.
+		Username         string `yaml:"username"`
+		Password         string `yaml:"password"`
+		SentinelUsername string `yaml:"sentinel_username"`
+		SentinelPassword string `yaml:"sentinel_password"`
+		DB               int    `yaml:"db"`
+		Topic            string `yaml:"topic"`
 	}
 )
 

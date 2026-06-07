@@ -90,6 +90,8 @@ notifier:
     master_name: "${NOTIFIER_REDIS_MASTER_NAME:}" 	# MasterName is the sentinel master name.
     username: "${NOTIFIER_REDIS_USERNAME:default}"
     password: "${NOTIFIER_REDIS_PASSWORD:}"
+    sentinel_username: "${NOTIFIER_REDIS_SENTINEL_USERNAME:}"
+    sentinel_password: "${NOTIFIER_REDIS_SENTINEL_PASSWORD:}"
     db: ${NOTIFIER_REDIS_DB:0}
     topic: "${NOTIFIER_REDIS_TOPIC:mcp-gateway:reload}"
 
@@ -102,6 +104,8 @@ session:
     master_name: "${SESSION_REDIS_MASTER_NAME:}"  # MasterName is the sentinel master name.
     username: "${SESSION_REDIS_USERNAME:default}"
     password: "${SESSION_REDIS_PASSWORD:}"
+    sentinel_username: "${SESSION_REDIS_SENTINEL_USERNAME:}"
+    sentinel_password: "${SESSION_REDIS_SENTINEL_PASSWORD:}"
     db: ${SESSION_REDIS_DB:0}
     topic: "${SESSION_REDIS_TOPIC:mcp-gateway:session}"
     prefix: "${SESSION_REDIS_PREFIX:session}"
@@ -119,6 +123,8 @@ auth:
         master_name: "${OAUTH2_REDIS_MASTER_NAME:}"  # MasterName is the sentinel master name.
         username: "${OAUTH2_REDIS_USERNAME:default}"
         password: "${OAUTH2_REDIS_PASSWORD:}"
+        sentinel_username: "${OAUTH2_REDIS_SENTINEL_USERNAME:}"
+        sentinel_password: "${OAUTH2_REDIS_SENTINEL_PASSWORD:}"
         db: ${OAUTH2_REDIS_DB:0}
   cors:
     allowOrigins:

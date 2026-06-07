@@ -19,7 +19,7 @@ type RedisStorage struct {
 }
 
 // NewRedisStorage creates a new Redis storage instance
-func NewRedisStorage(clusterType, addr, masterName string, username, password string, db int) (*RedisStorage, error) {
+func NewRedisStorage(clusterType, addr, masterName string, username, password, sentinelUsername, sentinelPassword string, db int) (*RedisStorage, error) {
 	addrs := utils.SplitByMultipleDelimiters(addr, ";", ",")
 	redisOptions := &redis.UniversalOptions{
 		Addrs:    addrs,
@@ -28,6 +28,8 @@ func NewRedisStorage(clusterType, addr, masterName string, username, password st
 	}
 	if clusterType == cnst.RedisClusterTypeSentinel {
 		redisOptions.MasterName = masterName
+		redisOptions.SentinelUsername = sentinelUsername
+		redisOptions.SentinelPassword = sentinelPassword
 	}
 	if clusterType != cnst.RedisClusterTypeCluster {
 		// can not set db in cluster mode

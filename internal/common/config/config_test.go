@@ -76,3 +76,48 @@ tool_access:
 	assert.NoError(t, err)
 	assert.Equal(t, []string{"127.0.0.1/32", "localhost", "::1/128"}, []string(cfg.ToolAccess.InternalNetwork.Allowlist))
 }
+
+func TestLoadConfig_MCPGateway_RedisSentinelCredentials(t *testing.T) {
+	tmp := t.TempDir()
+	old, _ := os.Getwd()
+	t.Cleanup(func() { _ = os.Chdir(old) })
+	_ = os.Chdir(tmp)
+
+	t.Setenv("NOTIFIER_REDIS_SENTINEL_USERNAME", "sentinel-notifier")
+	t.Setenv("NOTIFIER_REDIS_SENTINEL_PASSWORD", "notifier-pass")
+	t.Setenv("SESSION_REDIS_SENTINEL_USERNAME", "sentinel-session")
+	t.Setenv("SESSION_REDIS_SENTINEL_PASSWORD", "session-pass")
+	t.Setenv("OAUTH2_REDIS_SENTINEL_USERNAME", "sentinel-oauth")
+	t.Setenv("OAUTH2_REDIS_SENTINEL_PASSWORD", "oauth-pass")
+
+	yaml := `
+notifier:
+  redis:
+    sentinel_username: "${NOTIFIER_REDIS_SENTINEL_USERNAME:}"
+    sentinel_password: "${NOTIFIER_REDIS_SENTINEL_PASSWORD:}"
+session:
+  redis:
+    sentinel_username: "${SESSION_REDIS_SENTINEL_USERNAME:}"
+    sentinel_password: "${SESSION_REDIS_SENTINEL_PASSWORD:}"
+auth:
+  oauth2:
+    storage:
+      redis:
+        sentinel_username: "${OAUTH2_REDIS_SENTINEL_USERNAME:}"
+        sentinel_password: "${OAUTH2_REDIS_SENTINEL_PASSWORD:}"
+`
+	file := filepath.Join(tmp, "mcp-gateway.yaml")
+	assert.NoError(t, os.WriteFile(file, []byte(yaml), 0o644))
+
+	cfg, _, err := LoadConfig[MCPGatewayConfig]("mcp-gateway.yaml")
+	assert.NoError(t, err)
+	if err != nil {
+		return
+	}
+	assert.Equal(t, "sentinel-notifier", cfg.Notifier.Redis.SentinelUsername)
+	assert.Equal(t, "notifier-pass", cfg.Notifier.Redis.SentinelPassword)
+	assert.Equal(t, "sentinel-session", cfg.Session.Redis.SentinelUsername)
+	assert.Equal(t, "session-pass", cfg.Session.Redis.SentinelPassword)
+	assert.Equal(t, "sentinel-oauth", cfg.Auth.OAuth2.Storage.Redis.SentinelUsername)
+	assert.Equal(t, "oauth-pass", cfg.Auth.OAuth2.Storage.Redis.SentinelPassword)
+}
