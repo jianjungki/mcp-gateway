@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestResolveEnv(t *testing.T) {
@@ -107,13 +108,10 @@ auth:
         sentinel_password: "${OAUTH2_REDIS_SENTINEL_PASSWORD:}"
 `
 	file := filepath.Join(tmp, "mcp-gateway.yaml")
-	assert.NoError(t, os.WriteFile(file, []byte(yaml), 0o644))
+	require.NoError(t, os.WriteFile(file, []byte(yaml), 0o644))
 
 	cfg, _, err := LoadConfig[MCPGatewayConfig]("mcp-gateway.yaml")
-	assert.NoError(t, err)
-	if err != nil {
-		return
-	}
+	require.NoError(t, err)
 	assert.Equal(t, "sentinel-notifier", cfg.Notifier.Redis.SentinelUsername)
 	assert.Equal(t, "notifier-pass", cfg.Notifier.Redis.SentinelPassword)
 	assert.Equal(t, "sentinel-session", cfg.Session.Redis.SentinelUsername)
