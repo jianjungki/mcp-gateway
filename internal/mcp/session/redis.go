@@ -81,8 +81,7 @@ func NewRedisStore(ctx context.Context, logger *zap.Logger, cfg config.SessionRe
 
 // handleUpdates handles session update notifications via streams
 func (s *RedisStore) handleUpdates() {
-	// Start from the latest message ($ means read only new messages)
-	lastID := "$"
+	lastID := "0-0"
 
 	for {
 		select {
